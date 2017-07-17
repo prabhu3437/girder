@@ -71,7 +71,6 @@ ItemView.prototype.events['click a.g-select-item-task'] = function (e) {
         parentView: this,
         item: this.model
     }).once('g:selected', function (params) {
-        console.log('navigating after selected');
         let itemId = params.itemId;
         let taskId = params.taskId;
 

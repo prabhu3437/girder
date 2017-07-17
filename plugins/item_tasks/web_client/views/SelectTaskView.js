@@ -1,9 +1,6 @@
 import SearchFieldWidget from 'girder/views/widgets/SearchFieldWidget';
 import View from 'girder/views/View';
 
-import 'girder/utilities/jquery/girderEnable';
-import 'girder/utilities/jquery/girderModal';
-
 import SelectTaskViewDialogTemplate from '../templates/selectTaskViewDialog.pug';
 import selectTaskViewDescriptionTemplate from '../templates/selectTaskViewTargetDescription.pug';
 
@@ -17,6 +14,7 @@ var SelectTaskView = View.extend({
         'submit #g-select-task-form': function (e) {
             e.preventDefault();
             this.$('.g-submit-select-task').girderEnable(false);
+            this.$el.modal('hide');
 
             this.trigger('g:selected', {
                 itemId: this.item.id,
@@ -37,11 +35,14 @@ var SelectTaskView = View.extend({
     },
 
     render: function () {
-        this.$el.html(SelectTaskViewDialogTemplate({
-            item: this.item
-        })).girderModal(this).on('shown.bs.modal', () => {
-            this.$('#g-task-width').focus();
-        });
+        this.$el
+            .html(SelectTaskViewDialogTemplate({
+                item: this.item
+            }))
+            .girderModal(this)
+            .on('shown.bs.modal', () => {
+                this.$('#g-task-width').focus();
+            });
 
         this.$('#g-task-width').focus();
 

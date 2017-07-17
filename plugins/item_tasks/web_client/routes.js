@@ -20,7 +20,7 @@ router.route('item_tasks', 'itemTaskList', () => {
 router.route('item_task/:id/run', (id, params) => {
     const itemTask = new ItemModel({_id: id});
     let job = null;
-    let item = null;
+    let inputItem = null;
     const promises = [itemTask.fetch()];
 
     if (params.fromJob) {
@@ -29,8 +29,8 @@ router.route('item_task/:id/run', (id, params) => {
     }
 
     if (params.itemId) {
-        item = new ItemModel({_id: params.itemId});
-        promises.push(item.fetch());
+        inputItem = new ItemModel({_id: params.itemId});
+        promises.push(inputItem.fetch());
     }
 
     $.when(...promises).done(() => {
@@ -41,7 +41,6 @@ router.route('item_task/:id/run', (id, params) => {
         }
 
         if (params.itemId) {
-            let prefilledItemId = params.itemId;
             let itemTaskSpec = itemTask.get('meta').itemTaskSpec;
 
             let fileInputSpecs = _.where(itemTaskSpec.inputs, {'type': 'file'});
@@ -51,11 +50,9 @@ router.route('item_task/:id/run', (id, params) => {
                 initialValues.inputs[fileInputSpec.id] = {
                     mode: 'girder',
                     resource_type: 'item',
-                    id: prefilledItemId,
-                    fileName: item.name()
+                    id: params.itemId,
+                    fileName: inputItem.name()
                 };
-            } else {
-                console.log('Selected task has wrong number of file inputs.');
             }
         }
 
