@@ -1,6 +1,9 @@
 import SearchFieldWidget from 'girder/views/widgets/SearchFieldWidget';
 import View from 'girder/views/View';
 
+import 'girder/utilities/jquery/girderEnable';
+import 'girder/utilities/jquery/girderModal';
+
 import SelectTaskViewDialogTemplate from '../templates/selectTaskViewDialog.pug';
 import selectTaskViewDescriptionTemplate from '../templates/selectTaskViewTargetDescription.pug';
 
@@ -39,12 +42,7 @@ var SelectTaskView = View.extend({
             .html(SelectTaskViewDialogTemplate({
                 item: this.item
             }))
-            .girderModal(this)
-            .on('shown.bs.modal', () => {
-                this.$('#g-task-width').focus();
-            });
-
-        this.$('#g-task-width').focus();
+            .girderModal(this);
 
         this.searchWidget.setElement(this.$('.g-search-field-container')).render();
         this.$('.g-submit-select-task').girderEnable(false);
